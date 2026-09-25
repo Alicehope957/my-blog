@@ -7,7 +7,7 @@
 
 # ---------------- 导航栏 ----------------
 navbar:
-  blog_title: "我的技术笔记"
+  blog_title: "Rin的个人页面"
   menu:
     - { key: "home",     link: "/",           icon: "iconfont icon-home-fill" }
     - { key: "archive",  link: "/archives/",  icon: "iconfont icon-archive-fill" }
