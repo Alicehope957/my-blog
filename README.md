@@ -260,11 +260,12 @@ my-blog/
 ├── package.json             # 依赖和 npm 脚本
 ├── .nvmrc                   # 部署平台的 Node 版本
 ├── scaffolds/               # 新建文章的模板
+├── scripts/                 # ★ 构建自检：有页面生成失败就让构建报错（见第八节）
 ├── source/
 │   ├── _posts/              # ★ 你的文章都在这里
 │   ├── about/index.md       # 关于页
-│   ├── categories/index.md  # 分类页
-│   ├── tags/index.md        # 标签页
+│   ├── categories/index.md  # 分类页（Fluid 主题本身也会生成，留着也无妨）
+│   ├── tags/index.md        # 标签页（同上）
 │   └── css/                 # 自托管样式：katex.min.css + fonts/ + custom.css
 └── public/                  # 构建产物（已 gitignore，不用管）
 ```
@@ -288,14 +289,48 @@ my-blog/
 **图片不显示**
 确认图片放在**和文章同名的文件夹**里，且文件名没有中文和空格。
 
+**改了内容、push 了、Cloudflare 也说构建成功，但网站没更新**
+
+先在页面地址后面加个随机参数刷新，绕过 CDN 缓存（比如 `/about/?v=123`）。
+如果变成 **404**，基本可以确定是那个文件的 **front-matter 被破坏了**：
+第 1 行的 `---` 被转义成了 `\---`，或者文件开头多了 BOM / 空行。
+
+后果很阴险：Hexo 只在日志里打一行 ERROR，**退出码依然是 0**，
+所以 Cloudflare 显示「构建成功」，但那个页面根本没生成 ——
+线上要么 404，要么你看到的是 CDN 缓存的旧页面。
+
+**怎么定位**：本地跑一次构建，自检会直接点名坏掉的文件：
+
+```bash
+npm run build
+```
+
+会看到类似输出：
+
+```
+[构建自检失败] 构建有问题，已阻止部署。
+Hexo 处理这些文件时出错了（它们的内容不会出现在网站上）：
+  ✗ about/index.md
+```
+
+`scripts/check-pages.js` 就是干这个的：它拦截 Hexo 的 `Process failed` 日志并让构建
+**真正失败**，所以以后在 Cloudflare 上会看到红色的构建失败 —— 那是它在正常工作，
+不要慌，按日志改掉对应文件即可。
+
 **Cloudflare 构建失败**
 九成是 Node 版本：确认环境变量里有 `NODE_VERSION=22`。
 
 **npm 安装报错**
 删掉 `node_modules` 和 `package-lock.json`，重新 `npm install`。
 
-**注意：不要让 Markdown 格式化工具处理本文件**
-有些格式化器会把 `` `_config.yml` `` 转义成 `` `\_config.yml` ``、把 `---` 转义成 `\---`、把公式转义成 `$f\_c = \\dfrac{...}$`。这些反斜杠会被原样显示出来，公式也会失效。本仓库的 `.editorconfig` / 编辑器设置里应关掉这类自动转义。
+**别用系统默认查看器或 Markdown 预览器编辑这些 .md 文件**
+
+已经踩过两次坑了：某些查看器 / 格式化器会自动「帮你转义」，把 `` `_config.yml` ``
+写成 `` `\_config.yml` ``、把 front-matter 的 `---` 写成 `\---`、把 `[链接]` 写成 `\[链接]`。
+轻则页面上多出一堆反斜杠，重则整个页面被 Hexo 跳过、线上直接 404。
+
+建议：用 **VS Code** 打开这些文件，并把 Windows 里 `.md` 的默认打开方式改成 VS Code。
+装 `Markdown All in One` 就够用了，不要装会自动 format 的插件。
 
 ---
 

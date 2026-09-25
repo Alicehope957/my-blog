@@ -1,5 +1,4 @@
-\---
-
+---
 title: 关于
 date: 2026-09-25 16:00:00
 layout: about
@@ -26,8 +25,7 @@ type: about
 
 ## 联系我
 
-* GitHub：\[https://github.com/Alicehope957]
-* 邮箱：\[1626788950@qq.com/rin3water@gmail.com]
+* GitHub：<https://github.com/Alicehope957>
+* 邮箱：1626788950@qq.com / rin3water@gmail.com
 
 > 欢迎交流，但请不要发广告。
-
