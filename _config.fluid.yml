@@ -63,12 +63,18 @@ links:
 
 # ---------------- 关于页 ----------------
 about:
-  name: "你的名字"
+  name: "泠@RinOo"
   intro: "电子信息工程 · 记录学习过程"
   avatar: /img/avatar.png
   # 想加图标就去这里查 css class: https://hexo.fluid-dev.com/docs/icon/
   icons:
-    - { class: "iconfont icon-github-fill", link: "https://github.com/你的用户名", tip: "GitHub" }
+    - { class: "iconfont icon-github-fill", link: "https://github.com/Alicehope957", tip: "GitHub" }
+
+# ---------------- SEO ----------------
+# 输出 canonical 标签，告诉搜索引擎哪个才是正式地址
+# 依赖 _config.yml 里的 url，换域名后 canonical 会自动跟着变
+canonical:
+  enable: true
 
 # ---------------- 自定义样式 ----------------
 # 加载本地自托管的 KaTeX 公式样式（不依赖境外 CDN）

@@ -1,22 +1,28 @@
 # 我的技术笔记
 
-个人博客，基于 **Hexo 8 + Fluid 主题**，部署在 **Cloudflare Pages**。
+个人博客，基于 **Hexo 8 + Fluid 主题**，通过 **Cloudflare Workers**（Git 集成自动构建）部署。
+
+- 线上地址（临时）：<https://my-blog.1626788950.workers.dev>
+- 仓库：<https://github.com/Alicehope957/my-blog>
+
+> ⚠️ **这个临时域名在国内被 DNS 污染，需要代理才能访问。**
+> 详见 [第四节](#四部署现状迁移到自定义域名)。绑上自己的域名后就能正常访问。
 
 已经配好的东西：
 
-- ✅ 数学公式（KaTeX **构建时**渲染，样式自托管，不依赖境外 CDN）
-- ✅ 代码高亮（构建时生成，无 JS 也能看到配色）
-- ✅ 文章同名图片文件夹（图片跟着文章走，迁移不丢图）
-- ✅ 中文换行优化、全文搜索、RSS 订阅、站点地图、404 页面
-- ✅ 响应式 + 深色模式（Fluid 自带）
+* ✅ 数学公式（KaTeX **构建时**渲染，样式自托管，不依赖境外 CDN）
+* ✅ 代码高亮（构建时生成，无 JS 也能看到配色）
+* ✅ 文章同名图片文件夹（图片跟着文章走，迁移不丢图）
+* ✅ 中文换行优化、全文搜索、RSS 订阅、站点地图、404 页面
+* ✅ 响应式 + 深色模式（Fluid 自带）
 
 ---
 
-## 一、开工前先改这 4 处
+## 一、开工前先改这几处
 
 | 文件 | 改什么 |
 | --- | --- |
-| `_config.yml` | `author` 改成你的名字；`url` 改成部署后的真实网址 |
+| `_config.yml` | `author`（已填 `泠@RinOo`）；`url` 换成最终域名 |
 | `_config.fluid.yml` | `navbar.blog_title` 博客名、`index.slogan.text` 首页副标题、`about.name` |
 | `source/about/index.md` | 自我介绍、GitHub、邮箱 |
 | `_config.fluid.yml` | `about.icons` 里的 GitHub 链接 |
@@ -39,6 +45,8 @@ source/_posts/
 └── 文章标题/          ← 这篇的图片放这里
 ```
 
+> 上面的 `source/_posts/` 是真实目录名，Markdown 里的下划线不用加反斜杠转义。
+
 ### 2. 本地预览
 
 ```bash
@@ -55,7 +63,7 @@ git commit -m "新增：文章标题"
 git push
 ```
 
-推送到 GitHub 后，Cloudflare Pages 自动构建发布，约 1 分钟。
+推送到 GitHub 后，Cloudflare 自动构建发布，约 1 分钟。
 
 ---
 
@@ -94,7 +102,7 @@ $$
 H(j\omega) = \frac{1}{1 + j\omega RC}
 $$
 
-**不需要任何额外开关**，写完直接构建即可。
+**不需要任何额外开关**，写完直接构建即可。公式里的反斜杠原样写，不要写成双反斜杠。
 
 ### 图片
 
@@ -104,7 +112,7 @@ $$
 ![示波器波形](波形图.png)
 ```
 
-> ⚠️ 注意：图片文件名建议用英文或数字（如 `waveform.png`），中文文件名在某些部署环境下会出现链接问题。
+> ⚠️ 图片文件名建议用英文或数字（如 `waveform.png`），中文文件名在某些部署环境下会出现链接问题。
 
 ### 代码
 
@@ -120,9 +128,9 @@ GPIOA->BSRR = GPIO_BSRR_BS5;
 
 | 效果 | 写法 |
 | --- | --- |
-| **加粗** | `**加粗**` |
-| *斜体* | `*斜体*` |
-| ~~删除线~~ | `~~删除线~~` |
+| 加粗 | `**加粗**` |
+| 斜体 | `*斜体*` |
+| 删除线 | `~~删除线~~` |
 | 高亮 | `==高亮==` |
 | 下标 | `H~2~O` |
 | 上标 | `x^2^` |
@@ -131,82 +139,101 @@ GPIOA->BSRR = GPIO_BSRR_BS5;
 
 ---
 
-## 四、首次部署到 Cloudflare Pages
+## 四、部署现状：迁移到自定义域名
 
-### 第 1 步：推到 GitHub
+### 现在的情况
 
-在 GitHub 网页上新建一个仓库（**不要**勾选 Add README），名字比如 `my-blog`，然后：
+站点是以 **Cloudflare Worker** 的形式部署的（不是 Pages），所以拿到的是：
 
-```bash
-git remote add origin https://github.com/你的用户名/my-blog.git
-git branch -M main
-git push -u origin main
+```
+my-blog.1626788950.workers.dev
+└─┬──┘ └────┬─────┘
+Worker 名   你账号的 workers.dev 子域名
 ```
 
-### 第 2 步：连接 Cloudflare Pages
+Cloudflare [官方文档](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/)明确建议：`workers.dev` 只是给个人项目快速试用的（被归类为 "Free website"），**正式站点应该跑在 custom domain 上**。
 
-1. 打开 <https://dash.cloudflare.com/> → 左侧 **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
-2. 授权 GitHub，选中刚才的仓库
-3. 构建配置填：
+### 为什么必须换掉
 
-   | 配置项 | 值 |
-   | --- | --- |
-   | Framework preset | `None` |
-   | Build command | `npm run build` |
-   | Build output directory | `public` |
+在国内网络上解析 `workers.dev` 会拿到被污染的假 IP。本机实测：
 
-4. 环境变量（**重要**，否则可能因为 Node 版本过低构建失败）：
+| 解析方式 | 结果 |
+| --- | --- |
+| 系统默认 DNS | `199.59.150.39` |
+| 8.8.8.8 | `199.59.150.43` |
+| 1.1.1.1 | `104.244.46.52` |
+| 对照：`developers.cloudflare.com` | `104.16.2.189` 等（正常的 Cloudflare 段） |
 
-   | 变量名 | 值 |
-   | --- | --- |
-   | `NODE_VERSION` | `22` |
+四个答案互不相同，且**全部不在 Cloudflare 的 IP 段**（Cloudflare 是 `104.16.x.x` / `172.67.x.x` / `188.114.x.x`）。这就是 DNS 污染，所以不开代理根本打不开。
 
-5. 点 **Save and Deploy**，等 1～2 分钟
+### 迁移步骤
 
-### 第 3 步：回头改 url
+**第 1 步：买域名**（约 ¥60/年）
 
-拿到 `https://xxx.pages.dev` 这个网址后，把 `_config.yml` 里的 `url` 改成它，再 push 一次。
+- **Cloudflare Registrar**：成本价、续费不涨价、不用实名 ← 最省事
+- Namecheap / Porkbun：也可以
+- 国内注册商（阿里云、腾讯云）：可以，但必须**实名认证**
 
-> **为什么用 Cloudflare 而不是 Vercel / GitHub Pages？**
-> Cloudflare 静态托管带宽不限、国内外访问都比较稳、绑自定义域名不需要备案；GitHub Pages 在国内访问经常不稳定；Vercel / Netlify 的免费额度规则这几年一直在收紧。
+**第 2 步：把域名接入 Cloudflare**
 
-### 备选：GitHub Pages
+1. <https://dash.cloudflare.com/> → **Add a site** → 输入域名 → 选 **Free** 计划
+2. 到域名注册商后台，把 **NS（名称服务器）** 改成 Cloudflare 给你的两个地址
+3. 等生效（通常几分钟到几小时）
 
-如果只想用 GitHub 自带的 Pages，在仓库里新建 `.github/workflows/pages.yml`：
+> 这一步不能跳过：Custom Domain 只能建在**你自己 Cloudflare 账号下的 zone** 上。
+
+**第 3 步：绑到 Worker**
+
+1. **Workers & Pages** → 选中你的 Worker
+2. **Settings → Domains & Routes → Add → Custom Domain**
+3. 填 `blog.你的域名.com`（或直接 `你的域名.com`）→ **Add Custom Domain**
+4. Cloudflare 会自动创建 DNS 记录并签发证书，等 1～2 分钟
+
+**第 4 步：改配置并推送**
 
 ```yaml
-name: Deploy Hexo to GitHub Pages
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: npm install
-      - run: npx hexo generate
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: public
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-    steps:
-      - uses: actions/deploy-pages@v4
+# _config.yml
+url: https://blog.你的域名.com
 ```
 
-然后在仓库 **Settings → Pages** 里把 Source 设为 **GitHub Actions**。
+```bash
+git add .
+git commit -m "绑定自定义域名"
+git push
+```
+
+`url` 决定 canonical、sitemap、RSS 里的绝对链接，不改会导致搜索引擎收录错误地址。
+
+**第 5 步（建议）：关掉 workers.dev**
+
+Worker → **Settings → Domains & Routes** → `workers.dev` 那一行点 **Disable**。
+避免同一份内容有两个可访问地址，被搜索引擎当成重复内容。
+
+### 几个要注意的点
+
+- **不需要备案。** Cloudflare 走海外节点，跟 ICP 备案无关。只有把域名解析到**中国大陆境内服务器**时才需要备案。
+- **`你的域名.com` 和 `www.你的域名.com` 是两个独立主机名。** Custom Domain 不支持通配符，只能精确匹配；两个都要用的话，另一个要单独加一条重定向规则。
+- **不能建在已有 CNAME 记录的主机名上。** 如果之前手动加过 DNS 记录，先删掉。
+- **国内速度仍不保证满速。** 自定义域名躲开了 `workers.dev` 的污染，但 Cloudflare 免费版国内线路偶尔绕路，速度有波动是正常的。
+- 如果绑了自定义域名后国内还是打不开，说明域名被针对性污染了，那就得换域名或者上国内方案。
+
+### 关于构建配置
+
+这个仓库里**没有** wrangler 配置文件 —— 你的部署用的是 Cloudflare 的 Git 集成，构建配置存在 Cloudflare 后台，不在代码里。如果哪天需要重配，参数是：
+
+| 配置项 | 值 |
+| --- | --- |
+| Build command | `npm run build` |
+| Build output directory | `public` |
+| 环境变量 `NODE_VERSION` | `22` |
+
+### 备选：彻底解决国内访问
+
+如果将来想让国内访问又快又稳，只有一条路：**国内对象存储 / OSS + CDN + 备案域名**。
+
+- 成本：域名约 ¥60/年 + 存储和 CDN 每月几块钱
+- 代价：要走 ICP 备案流程（个人可备案，但需要时间）
+- 结论：大一阶段没必要，先用 Cloudflare + 自定义域名观察一段时间
 
 ---
 
@@ -236,6 +263,7 @@ jobs:
 | 关于页头像和图标 | `_config.fluid.yml` → `about:`，头像图放 `source/img/avatar.png` |
 
 主题完整配置项和中文文档：<https://hexo.fluid-dev.com/docs/guide/>
+
 主题默认值一览（改之前先看这里）：`node_modules/hexo-theme-fluid/_config.yml`
 
 > 代码块目前是**行号模式**。想要「复制按钮 + 语言标签」，把 `_config.fluid.yml` 里 `code.highlight.line_number` 改成 `false`（Fluid 目前这两个不能同时出现）。
@@ -264,6 +292,9 @@ my-blog/
 
 ## 八、遇到问题
 
+**网站打不开 / 需要代理**
+见第四节。`workers.dev` 在国内被污染，绑自定义域名解决。
+
 **中文乱码 / 构建后文字变问号**
 确保 Markdown 文件保存为 **UTF-8 无 BOM**。（VS Code 右下角可以看到编码。）
 
@@ -277,10 +308,13 @@ my-blog/
 确认图片放在**和文章同名的文件夹**里，且文件名没有中文和空格。
 
 **Cloudflare 构建失败**
-九成是 Node 版本：在 Pages 设置里加环境变量 `NODE_VERSION=22`。
+九成是 Node 版本：确认环境变量里有 `NODE_VERSION=22`。
 
 **npm 安装报错**
 删掉 `node_modules` 和 `package-lock.json`，重新 `npm install`。
+
+**注意：不要让 Markdown 格式化工具处理本文件**
+有些格式化器会把 `` `_config.yml` `` 转义成 `` `\_config.yml` ``、把 `---` 转义成 `\---`、把公式转义成 `$f\_c = \\dfrac{...}$`。这些反斜杠会被原样显示出来，公式也会失效。本仓库的 `.editorconfig` / 编辑器设置里应关掉这类自动转义。
 
 ---
 
