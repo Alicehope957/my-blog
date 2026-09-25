@@ -1,12 +1,12 @@
 # 我的技术笔记
 
-个人博客，基于 **Hexo 8 + Fluid 主题**，通过 **Cloudflare Workers**（Git 集成自动构建）部署。
+个人博客，基于 **Hexo 8 + Fluid 主题**，部署在 **Cloudflare Pages**（Git 集成自动构建）。
 
-- 线上地址（临时）：<https://my-blog.1626788950.workers.dev>
+- 线上地址：<https://alicehope957.pages.dev>（Pages 项目建好后生效）
 - 仓库：<https://github.com/Alicehope957/my-blog>
 
-> ⚠️ **这个临时域名在国内被 DNS 污染，需要代理才能访问。**
-> 详见 [第四节](#四部署现状迁移到自定义域名)。绑上自己的域名后就能正常访问。
+> ℹ️ 最早部署的 `my-blog.1626788950.workers.dev` 在国内被 DNS 污染、不开代理打不开，
+> 所以改用 Cloudflare Pages。详见[第四节](#四部署cloudflare-pages)。
 
 已经配好的东西：
 
@@ -139,101 +139,80 @@ GPIOA->BSRR = GPIO_BSRR_BS5;
 
 ---
 
-## 四、部署现状：迁移到自定义域名
+## 四、部署：Cloudflare Pages
 
-### 现在的情况
-
-站点是以 **Cloudflare Worker** 的形式部署的（不是 Pages），所以拿到的是：
+### 目标网址
 
 ```
-my-blog.1626788950.workers.dev
-└─┬──┘ └────┬─────┘
-Worker 名   你账号的 workers.dev 子域名
+https://alicehope957.pages.dev
 ```
 
-Cloudflare [官方文档](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/)明确建议：`workers.dev` 只是给个人项目快速试用的（被归类为 "Free website"），**正式站点应该跑在 custom domain 上**。
+> **项目名是全球唯一的。** `my-blog` 已经被别人占用了（DNS 能解析出 IP），所以这里用 `alicehope957`。
+> 想换别的名字跟我说，我帮你探测是否可用。
 
-### 为什么必须换掉
+### 为什么不用 Workers
 
-在国内网络上解析 `workers.dev` 会拿到被污染的假 IP。本机实测：
+最早部署成了 Cloudflare **Worker**，拿到的是 `my-blog.1626788950.workers.dev`。这个域名在国内被 DNS 污染，不开代理根本打不开。本机实测：
 
-| 解析方式 | 结果 |
-| --- | --- |
-| 系统默认 DNS | `199.59.150.39` |
-| 8.8.8.8 | `199.59.150.43` |
-| 1.1.1.1 | `104.244.46.52` |
-| 对照：`developers.cloudflare.com` | `104.16.2.189` 等（正常的 Cloudflare 段） |
+| 域名 | DNS 解析 | 结果 |
+| --- | --- | --- |
+| `my-blog.1626788950.workers.dev` | `199.59.150.39`、`208.43.170.231` 等（每次不同，全都不在 Cloudflare 段） | ❌ 打不开 |
+| `alicehope957.pages.dev` | Cloudflare 段（`172.66.x.x`） | ✅ 干净 |
+| `developers.cloudflare.com`（对照） | `104.16.x.189` | ✅ |
 
-四个答案互不相同，且**全部不在 Cloudflare 的 IP 段**（Cloudflare 是 `104.16.x.x` / `172.67.x.x` / `188.114.x.x`）。这就是 DNS 污染，所以不开代理根本打不开。
+`workers.dev` 和 `pages.dev` 都是 Cloudflare 的免费域名，但在国内的待遇完全不一样。而且 Cloudflare [官方文档](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/)也明确说 `workers.dev` 只适合个人项目快速试用，正式站点应该用 custom domain。
 
-### 迁移步骤
+### 建立 Pages 项目（网页操作）
 
-**第 1 步：买域名**（约 ¥60/年）
+1. 打开 <https://dash.cloudflare.com/> → 左侧 **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
+2. 授权 GitHub，选中仓库 `Alicehope957/my-blog`
+3. **Project name** 填 `alicehope957` —— 这个名字决定最终网址，必须全球唯一
+4. 构建配置：
 
-- **Cloudflare Registrar**：成本价、续费不涨价、不用实名 ← 最省事
-- Namecheap / Porkbun：也可以
-- 国内注册商（阿里云、腾讯云）：可以，但必须**实名认证**
+   | 配置项 | 值 |
+   | --- | --- |
+   | Framework preset | `None` |
+   | Build command | `npm run build` |
+   | Build output directory | `public` |
 
-**第 2 步：把域名接入 Cloudflare**
+5. **环境变量**（不填可能因为 Node 版本过低构建失败）：
 
-1. <https://dash.cloudflare.com/> → **Add a site** → 输入域名 → 选 **Free** 计划
-2. 到域名注册商后台，把 **NS（名称服务器）** 改成 Cloudflare 给你的两个地址
-3. 等生效（通常几分钟到几小时）
+   | 变量名 | 值 |
+   | --- | --- |
+   | `NODE_VERSION` | `22` |
 
-> 这一步不能跳过：Custom Domain 只能建在**你自己 Cloudflare 账号下的 zone** 上。
+6. 点 **Save and Deploy**，等 1～2 分钟
 
-**第 3 步：绑到 Worker**
+### 部署成功后
 
-1. **Workers & Pages** → 选中你的 Worker
-2. **Settings → Domains & Routes → Add → Custom Domain**
-3. 填 `blog.你的域名.com`（或直接 `你的域名.com`）→ **Add Custom Domain**
-4. Cloudflare 会自动创建 DNS 记录并签发证书，等 1～2 分钟
+1. **删掉旧的 Worker**：Workers & Pages → 选中那个 Worker → Settings → 拉到最底部 **Delete**。
+   不然同一份内容会有两个地址。
+2. `_config.yml` 里的 `url` 已经改成 `https://alicehope957.pages.dev`。如果第 3 步换了项目名，这里要跟着改。
+3. 以后每次 `git push`，Cloudflare 都会自动重新构建，约 1 分钟。
 
-**第 4 步：改配置并推送**
+### 以后想绑自定义域名（可选）
 
-```yaml
-# _config.yml
-url: https://blog.你的域名.com
-```
+Pages 项目 → **Custom domains** → **Set up a custom domain** → 填域名。
 
-```bash
-git add .
-git commit -m "绑定自定义域名"
-git push
-```
+前提是：
 
-`url` 决定 canonical、sitemap、RSS 里的绝对链接，不改会导致搜索引擎收录错误地址。
+1. 买域名（约 ¥60/年；Cloudflare Registrar 成本价、不用实名，最省事）
+2. **先把域名接入 Cloudflare**（Add a site，然后到注册商处把 NS 改成 Cloudflare 的地址）
+   —— 自定义域名只能建在你自己账号下的 zone 上
 
-**第 5 步（建议）：关掉 workers.dev**
+注意：
 
-Worker → **Settings → Domains & Routes** → `workers.dev` 那一行点 **Disable**。
-避免同一份内容有两个可访问地址，被搜索引擎当成重复内容。
+- **不需要备案。** Cloudflare 走海外节点，跟 ICP 备案无关；只有解析到中国大陆境内服务器时才需要。
+- `你的域名.com` 和 `www.你的域名.com` 是两个独立主机名，要分别添加，另一个再加一条重定向规则。
+- 绑完记得把 `_config.yml` 的 `url` 一起改掉，否则 sitemap 和 canonical 还指向旧地址。
 
-### 几个要注意的点
+### 如果 pages.dev 哪天也不好使了
 
-- **不需要备案。** Cloudflare 走海外节点，跟 ICP 备案无关。只有把域名解析到**中国大陆境内服务器**时才需要备案。
-- **`你的域名.com` 和 `www.你的域名.com` 是两个独立主机名。** Custom Domain 不支持通配符，只能精确匹配；两个都要用的话，另一个要单独加一条重定向规则。
-- **不能建在已有 CNAME 记录的主机名上。** 如果之前手动加过 DNS 记录，先删掉。
-- **国内速度仍不保证满速。** 自定义域名躲开了 `workers.dev` 的污染，但 Cloudflare 免费版国内线路偶尔绕路，速度有波动是正常的。
-- 如果绑了自定义域名后国内还是打不开，说明域名被针对性污染了，那就得换域名或者上国内方案。
+备选方案（都是免费的）：
 
-### 关于构建配置
-
-这个仓库里**没有** wrangler 配置文件 —— 你的部署用的是 Cloudflare 的 Git 集成，构建配置存在 Cloudflare 后台，不在代码里。如果哪天需要重配，参数是：
-
-| 配置项 | 值 |
-| --- | --- |
-| Build command | `npm run build` |
-| Build output directory | `public` |
-| 环境变量 `NODE_VERSION` | `22` |
-
-### 备选：彻底解决国内访问
-
-如果将来想让国内访问又快又稳，只有一条路：**国内对象存储 / OSS + CDN + 备案域名**。
-
-- 成本：域名约 ¥60/年 + 存储和 CDN 每月几块钱
-- 代价：要走 ICP 备案流程（个人可备案，但需要时间）
-- 结论：大一阶段没必要，先用 Cloudflare + 自定义域名观察一段时间
+- **GitHub Pages**：<https://alicehope957.github.io>。实测这台机器上打得开（DNS 没被污染），但要求把仓库改名为 `Alicehope957.github.io`，且国内速度一般。
+- **腾讯 EdgeOne Pages**：<https://pages.edgeone.ai/>。国产、免费、国内访问快，有现成的 Hexo 部署教程。
+- **国内 OSS + CDN + 备案域名**：最稳，但要走备案流程，大一阶段没必要。
 
 ---
 
@@ -293,7 +272,7 @@ my-blog/
 ## 八、遇到问题
 
 **网站打不开 / 需要代理**
-见第四节。`workers.dev` 在国内被污染，绑自定义域名解决。
+见第四节。旧的 `workers.dev` 域名在国内被 DNS 污染，改用 `pages.dev` 即可。
 
 **中文乱码 / 构建后文字变问号**
 确保 Markdown 文件保存为 **UTF-8 无 BOM**。（VS Code 右下角可以看到编码。）
