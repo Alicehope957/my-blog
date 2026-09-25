@@ -1,0 +1,151 @@
+# ============================================================
+#  Hexo 站点配置
+#  你平时只需要改最上面「站点」和「网址」这两块
+#  完整文档: https://hexo.io/docs/configuration
+#  主题配置在另一个文件: _config.fluid.yml
+# ============================================================
+
+# ---------------- 站点 ----------------
+title: 我的技术笔记
+subtitle: '电子信息工程 · 学习记录'
+description: '一个大一 EIE 学生的课程笔记、实验记录和项目日志'
+keywords: 电子信息工程, 课程笔记, 实验报告, STM32, 嵌入式
+author: 你的名字          # ← 改成你的名字或昵称
+language: zh-CN
+timezone: 'Asia/Shanghai'
+
+# ---------------- 网址 ----------------
+# 部署到 Cloudflare Pages 之后，把 url 改成你的真实网址
+url: https://your-blog.pages.dev
+root: /
+permalink: :year/:month/:day/:title/
+permalink_defaults:
+pretty_urls:
+  trailing_index: true
+  trailing_html: true
+
+# ---------------- 目录 ----------------
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# ---------------- 写作 ----------------
+new_post_name: :title.md
+default_layout: post
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude:
+filename_case: 0
+render_drafts: false
+
+# 每篇文章自动配一个同名图片文件夹（图片管理最省心的方式）
+post_asset_folder: true
+
+relative_link: false
+future: true
+
+# 注意：Fluid 主题会在服务端强制接管下面的高亮配置（hljs: true / wrap: false），
+# 所以不用在这里纠结，改主题配置里的 code.highlight 即可
+syntax_highlighter: highlight.js
+highlight:
+  line_number: true
+  auto_detect: false
+  tab_replace: ''
+  wrap: true
+  hljs: false
+prismjs:
+  preprocess: true
+  line_number: true
+  tab_replace: ''
+
+# ---------------- Markdown 渲染器 (markdown-it) ----------------
+markdown:
+  preset: 'default'
+  render:
+    html: true
+    xhtmlOut: false
+    langPrefix: 'language-'
+    breaks: true          # 单个换行就换行，符合中文写作习惯
+    linkify: true
+    typographer: false    # 关掉「智能标点」，避免把公式和代码里的符号改掉
+  plugins:
+    - markdown-it-cjk-breaks        # 中文换行优化，不在汉字之间断行
+    - markdown-it-mark              # ==高亮==
+    - markdown-it-sub               # H~2~O 下标
+    - markdown-it-sup               # x^2^ 上标
+    - markdown-it-emoji             # :smile:
+    - '@renbaoshuo/markdown-it-katex'   # $公式$，构建时预渲染（样式在 source/css/katex.min.css）
+  anchors:
+    level: 2
+    collisionSuffix: ''
+    permalink: false
+    permalinkClass: 'header-anchor'
+    permalinkSide: 'left'
+    permalinkSymbol: '¶'
+    case: 0
+    separator: '-'
+  images:
+    lazyload: false
+    prepend_root: false
+    post_asset: true      # 让 ![](图片.png) 自动指向文章同名文件夹
+
+# ---------------- 首页 ----------------
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+
+# ---------------- 分类与标签 ----------------
+default_category: 未分类
+category_map:
+tag_map:
+
+# ---------------- 日期格式 ----------------
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+updated_option: 'mtime'
+
+# ---------------- 分页 ----------------
+per_page: 10
+pagination_dir: page
+
+# ---------------- 扩展 ----------------
+theme: fluid
+
+# ---------------- 本地搜索（配合导航栏的搜索框）----------------
+search:
+  path: local-search.xml
+  field: post
+  content: true
+  format: striptags
+
+# ---------------- RSS 订阅 ----------------
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content: true
+  content_limit: 140
+  content_limit_delim: ' '
+  order_by: -date
+  icon:
+
+# ---------------- 站点地图（给搜索引擎用）----------------
+sitemap:
+  path: sitemap.xml
+  rel: false
+  tags: true
+  categories: true
+
+# ---------------- 部署 ----------------
+# 我们用 Cloudflare Pages 自动构建，不需要 hexo deploy，保持为空即可
+deploy:
+  type: ''

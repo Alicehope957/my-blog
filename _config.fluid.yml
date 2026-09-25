@@ -1,0 +1,76 @@
+# ============================================================
+#  Fluid 主题配置
+#  这里只写「要覆盖」的项，其余自动使用主题默认值
+#  主题默认值一览: node_modules/hexo-theme-fluid/_config.yml
+#  中文配置指南: https://hexo.fluid-dev.com/docs/guide/
+# ============================================================
+
+# ---------------- 导航栏 ----------------
+navbar:
+  blog_title: "我的技术笔记"
+  menu:
+    - { key: "home",     link: "/",           icon: "iconfont icon-home-fill" }
+    - { key: "archive",  link: "/archives/",  icon: "iconfont icon-archive-fill" }
+    - { key: "category", link: "/categories/", icon: "iconfont icon-category-fill" }
+    - { key: "tag",      link: "/tags/",      icon: "iconfont icon-tags-fill" }
+    - { key: "about",    link: "/about/",     icon: "iconfont icon-user-fill" }
+
+# ---------------- 首页副标题（多行会随机显示一句）----------------
+index:
+  slogan:
+    enable: true
+    text:
+      - "电子信息工程 · 学习记录"
+      - "课程笔记 / 实验记录 / 项目日志"
+      - "把踩过的坑记下来，下次就不用再踩"
+
+# ---------------- 页脚 ----------------
+footer:
+  content: '
+    <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+  '
+
+# ---------------- 代码块 ----------------
+code:
+  copy_btn: true
+  language:
+    enable: true
+    default: "TEXT"
+  highlight:
+    enable: true
+    # 想显示「复制按钮 + 语言标签」就把 line_number 改成 false
+    # （二选一：行号 和 复制按钮 目前不能同时出现）
+    line_number: true
+    lib: "highlightjs"
+    highlightjs:
+      style: "github gist"
+      style_dark: "github-dark"
+
+# ---------------- 文章页 ----------------
+post:
+  # 右侧目录
+  toc:
+    enable: true
+  # 图片点击放大
+  image_zoom:
+    enable: true
+
+# ---------------- 友链页（暂时用不上，关掉避免多一个空页面）----------------
+links:
+  enable: false
+
+# ---------------- 关于页 ----------------
+about:
+  name: "你的名字"
+  intro: "电子信息工程 · 记录学习过程"
+  avatar: /img/avatar.png
+  # 想加图标就去这里查 css class: https://hexo.fluid-dev.com/docs/icon/
+  icons:
+    - { class: "iconfont icon-github-fill", link: "https://github.com/你的用户名", tip: "GitHub" }
+
+# ---------------- 自定义样式 ----------------
+# 加载本地自托管的 KaTeX 公式样式（不依赖境外 CDN）
+custom_css:
+  - /css/katex.min.css
