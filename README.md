@@ -2,11 +2,11 @@
 
 个人博客，基于 **Hexo 8 + Fluid 主题**，部署在 **Cloudflare Pages**（Git 集成自动构建）。
 
-- 线上地址：<https://alicehope957.pages.dev>（Pages 项目建好后生效）
+- 线上地址：<https://rin3water.pages.dev> ✅ 已上线，国内不用代理也能打开
 - 仓库：<https://github.com/Alicehope957/my-blog>
 
 > ℹ️ 最早部署的 `my-blog.1626788950.workers.dev` 在国内被 DNS 污染、不开代理打不开，
-> 所以改用 Cloudflare Pages。详见[第四节](#四部署cloudflare-pages)。
+> 改用 Cloudflare Pages 并把项目名改成 `rin3water` 才解决。详见[第四节](#四部署cloudflare-pages)。
 
 已经配好的东西：
 
@@ -141,14 +141,15 @@ GPIOA->BSRR = GPIO_BSRR_BS5;
 
 ## 四、部署：Cloudflare Pages
 
-### 目标网址
+### 网址
 
 ```
-https://alicehope957.pages.dev
+https://rin3water.pages.dev
 ```
 
-> **项目名是全球唯一的。** `my-blog` 已经被别人占用了（DNS 能解析出 IP），所以这里用 `alicehope957`。
-> 想换别的名字跟我说，我帮你探测是否可用。
+> **Pages 的项目名是全球唯一的**，直接决定网址。
+> 一开始想用 `my-blog`，但已经被别人占了（DNS 能解析出 IP，就说明那里有项目），所以改成了 `rin3water`。
+> 以后再改名，记得同步改 `_config.yml` 里的 `url`。
 
 ### 为什么不用 Workers
 
@@ -157,7 +158,7 @@ https://alicehope957.pages.dev
 | 域名 | DNS 解析 | 结果 |
 | --- | --- | --- |
 | `my-blog.1626788950.workers.dev` | `199.59.150.39`、`208.43.170.231` 等（每次不同，全都不在 Cloudflare 段） | ❌ 打不开 |
-| `alicehope957.pages.dev` | Cloudflare 段（`172.66.x.x`） | ✅ 干净 |
+| `rin3water.pages.dev` | Cloudflare 段（`172.66.x.x`） | ✅ 实测可访问 |
 | `developers.cloudflare.com`（对照） | `104.16.x.189` | ✅ |
 
 `workers.dev` 和 `pages.dev` 都是 Cloudflare 的免费域名，但在国内的待遇完全不一样。而且 Cloudflare [官方文档](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/)也明确说 `workers.dev` 只适合个人项目快速试用，正式站点应该用 custom domain。
@@ -166,7 +167,7 @@ https://alicehope957.pages.dev
 
 1. 打开 <https://dash.cloudflare.com/> → 左侧 **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
 2. 授权 GitHub，选中仓库 `Alicehope957/my-blog`
-3. **Project name** 填 `alicehope957` —— 这个名字决定最终网址，必须全球唯一
+3. **Project name** 填 `rin3water` —— 这个名字决定最终网址，必须全球唯一
 4. 构建配置：
 
    | 配置项 | 值 |
@@ -187,7 +188,8 @@ https://alicehope957.pages.dev
 
 1. **删掉旧的 Worker**：Workers & Pages → 选中那个 Worker → Settings → 拉到最底部 **Delete**。
    不然同一份内容会有两个地址。
-2. `_config.yml` 里的 `url` 已经改成 `https://alicehope957.pages.dev`。如果第 3 步换了项目名，这里要跟着改。
+2. `_config.yml` 里的 `url` 要写成 `https://rin3water.pages.dev` —— 注意是**两个斜杠**。
+   写成一个斜杠（`https:/...`）虽然 Hexo 内部会容错、表面看不出来，但属于错误配置，迟早出问题。
 3. 以后每次 `git push`，Cloudflare 都会自动重新构建，约 1 分钟。
 
 ### 以后想绑自定义域名（可选）
@@ -263,7 +265,7 @@ my-blog/
 │   ├── about/index.md       # 关于页
 │   ├── categories/index.md  # 分类页
 │   ├── tags/index.md        # 标签页
-│   └── css/                 # 自托管的 KaTeX 样式和字体
+│   └── css/                 # 自托管样式：katex.min.css + fonts/ + custom.css
 └── public/                  # 构建产物（已 gitignore，不用管）
 ```
 

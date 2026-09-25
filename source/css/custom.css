@@ -1,0 +1,30 @@
+/* ============================================================
+   自定义样式
+   1) 任务列表（由 markdown-it-task-lists 生成 checkbox）
+      markdown-it-task-lists 会在 <li> 上加 task-list-item 类，
+      checkbox 上加 task-list-item-checkbox 类，但主题自带的样式
+      不知道这两个类，所以要在这里补上。
+   ============================================================ */
+
+/* 去掉列表前面的圆点，让 checkbox 顶替它的位置 */
+.markdown-body li.task-list-item {
+  list-style-type: none;
+}
+
+/* 把 checkbox 挪到原来圆点的位置 */
+.markdown-body li.task-list-item .task-list-item-checkbox {
+  margin: 0 0.4em 0.25em -1.5em;
+  vertical-align: middle;
+}
+
+/* 已完成（打勾）的那几行淡化一点，视觉上区分开 */
+.markdown-body li.task-list-item:has(input[type="checkbox"]:checked) {
+  opacity: 0.65;
+}
+
+/* 顺便把行内代码在正文里的对比度提高一点，中文夹代码时更清楚 */
+.markdown-body code:not([class]) {
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  background-color: rgba(175, 184, 193, 0.2);
+}

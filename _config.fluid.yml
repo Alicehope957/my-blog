@@ -80,3 +80,4 @@ canonical:
 # 加载本地自托管的 KaTeX 公式样式（不依赖境外 CDN）
 custom_css:
   - /css/katex.min.css
+  - /css/custom.css

@@ -82,6 +82,7 @@ markdown:
     - markdown-it-sub               # H~2~O 下标
     - markdown-it-sup               # x^2^ 上标
     - markdown-it-emoji             # :smile:
+    - markdown-it-task-lists        # - [x] 任务列表（配套样式在 source/css/custom.css）
     - '@renbaoshuo/markdown-it-katex'   # $公式$，构建时预渲染（样式在 source/css/katex.min.css）
   anchors:
     level: 2
