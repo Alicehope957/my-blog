@@ -17,7 +17,7 @@ timezone: 'Asia/Shanghai'
 # ---------------- 网址 ----------------
 # 站点真实网址。换了域名（或绑了自定义域名）之后要改这里，
 # 它决定 canonical、sitemap、RSS 里的绝对链接
-url: https://alicehope957.pages.dev
+url: https://rin3water.pages.dev
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
