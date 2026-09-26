@@ -7,7 +7,7 @@
 
 # ---------------- 导航栏 ----------------
 navbar:
-  blog_title: "Rin的个人页面"
+  blog_title: "奇思随想"
   menu:
     - { key: "home",     link: "/",           icon: "iconfont icon-home-fill" }
     - { key: "archive",  link: "/archives/",  icon: "iconfont icon-archive-fill" }
@@ -20,8 +20,9 @@ index:
   slogan:
     enable: true
     text:
-      - "电子信息 · 学习记录"
-      - "课程笔记 / 代码记录 / 项目日志"
+      - "泠RinOo的博客"
+      - "笔记 / 代码 / 日志"
+      - "偶尔刷新杂谈 / 吐槽"
       - "悟已往之不谏，知来者之可追"
       - "只要想起一生中后悔的事，梅花便落满了南山"
 
@@ -65,7 +66,7 @@ links:
 # ---------------- 关于页 ----------------
 about:
   name: "泠RinOo"
-  intro: "电子信息类 · 记录学习过程"
+  intro: "科技数码 · ACGN爱好者"
   avatar: /img/avatar.png
   # 想加图标就去这里查 css class: https://hexo.fluid-dev.com/docs/icon/
   icons:
