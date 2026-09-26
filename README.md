@@ -158,7 +158,7 @@ GPIOA->BSRR = GPIO_BSRR_BS5;
 ```
 my-blog/
 ├── _config.yml              # 站点配置（标题、作者、网址、渲染器）
-├── _config.fluid.yml        # 主题配置（只写覆盖项）
+├── _config.fluid.yml        # 主题配置（覆盖项）
 ├── package.json             # 依赖和 npm 脚本
 ├── .nvmrc                   # 部署平台的 Node 版本
 ├── scaffolds/               # 新建文章的模板
@@ -171,19 +171,3 @@ my-blog/
 │   └── css/                 # 自托管样式：katex.min.css + fonts/ + custom.css
 └── public/                  # 构建产物（已 gitignore）
 ```
-
----
-
-## 遇到问题
-
-**改配置没生效**
-先 `npx hexo clean` 再 `npx hexo server`。
-
-**公式没渲染**
-检查是否写成了 `$...$`（美元符号），以及公式里的 `$` 是否成对。行内公式前后要有空格或标点，不能紧贴汉字。
-
-**图片不显示**
-确认图片放在**和文章同名的文件夹**里，且不要使用中文文件名。
-
-**npm 安装报错**
-删掉 `node_modules` 和 `package-lock.json`，重新 `npm install`。
