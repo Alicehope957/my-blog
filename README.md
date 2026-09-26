@@ -125,10 +125,10 @@ GPIOA->BSRR = GPIO_BSRR_BS5;
 | 命令 | 作用 |
 | --- | --- |
 | `npx hexo new "标题"` | 新建文章 |
-| `npx hexo new draft "标题"` | 新建草稿（不会发布） |
+| `npx hexo new draft "标题"` | 新建草稿 |
 | `npx hexo publish "标题"` | 把草稿转成正式文章 |
 | `npx hexo server` | 本地预览 <http://localhost:4000> |
-| `npx hexo clean` | 清理缓存（改配置后建议执行） |
+| `npx hexo clean` | 清理缓存 |
 | `npx hexo generate` | 只构建，不启动服务器 |
 
 也可以简写：`npm run new -- "标题"`、`npm run server`、`npm run build`、`npm run clean`。
@@ -137,7 +137,7 @@ GPIOA->BSRR = GPIO_BSRR_BS5;
 
 ## 改外观
 
-| 改什么 | 改哪里 |
+| 内容 | 配置文件 |
 | --- | --- |
 | 导航栏菜单、首页副标题、页脚 | `_config.fluid.yml` |
 | 代码块样式 / 行号 / 复制按钮 | `_config.fluid.yml` → `code.highlight` |
@@ -149,7 +149,7 @@ GPIOA->BSRR = GPIO_BSRR_BS5;
 
 主题默认值一览：`node_modules/hexo-theme-fluid/_config.yml`
 
-> 代码块目前是**行号模式**。想要「复制按钮 + 语言标签」，把 `_config.fluid.yml` 里 `code.highlight.line_number` 改成 `false`（Fluid 目前这两个不能同时出现）。
+> 代码块目前是**行号模式**。切换「复制按钮 + 语言标签」，把 `_config.fluid.yml` 里 `code.highlight.line_number` 改成 `false`。
 
 ---
 
@@ -176,10 +176,10 @@ my-blog/
 
 ## 遇到问题
 
-**改了配置没生效**
+**改配置没生效**
 先 `npx hexo clean` 再 `npx hexo server`。
 
-**公式没渲染出来**
+**公式没渲染**
 检查是否写成了 `$...$`（美元符号），以及公式里的 `$` 是否成对。行内公式前后要有空格或标点，不能紧贴汉字。
 
 **图片不显示**
