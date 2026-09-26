@@ -1,0 +1,43 @@
+{
+  "version": "Live2DViewerEX Config 1.0",
+  "model": "model.moc",
+  "textures": [
+    "model.1024/texture_00.png",
+    "model.1024/texture_01.png"
+  ],
+  "layout": {
+    "center_x": 0.0,
+    "center_y": 0.0,
+    "width": 2.0
+  },
+  "hit_areas_custom": {
+    "body_x": [-1.30, 0.45],
+    "body_y": [-1.35, 0.50],
+    "head_x": [0, 0],
+    "head_y": [0, 0]
+  },
+  "motions": {
+    "tap_body": [
+      { "file": "motions/tap_bust/tapbust1.mtn", "fade_in": 1000, "fade_out": 0 },
+      { "file": "motions/tap_bust/tapbust2.mtn", "fade_in": 1000, "fade_out": 0 }
+    ],
+    "tap_bust": [
+      { "file": "motions/tap_bust/tapbust1.mtn", "fade_in": 1000, "fade_out": 0 },
+      { "file": "motions/tap_bust/tapbust2.mtn", "fade_in": 1000, "fade_out": 0 }
+    ],
+    "tap_hand": [
+      { "file": "motions/tap_hand/taphand.mtn", "fade_in": 1000, "fade_out": 0 }
+    ],
+    "idle": [
+      { "file": "motions/idle/idle.mtn", "fade_in": 0, "fade_out": 0 },
+      { "file": "motions/idle/idle2.mtn", "fade_in": 0, "fade_out": 0 },
+      { "file": "motions/idle/idle3.mtn", "fade_in": 0, "fade_out": 0 },
+      { "file": "motions/idle/idle4.mtn", "fade_in": 0, "fade_out": 0 },
+      { "file": "motions/idle/idle5.mtn", "fade_in": 0, "fade_out": 0 }
+    ],
+    "tap_hm": [
+      { "file": "motions/tap_hm/taphm.mtn", "fade_in": 1000, "fade_out": 0 }
+    ]
+  },
+  "physics": "physics.json"
+}

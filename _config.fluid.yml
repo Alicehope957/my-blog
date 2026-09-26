@@ -23,6 +23,7 @@ index:
       - "电子信息 · 学习记录"
       - "课程笔记 / 代码记录 / 项目日志"
       - "悟已往之不谏，知来者之可追"
+      - "只要想起一生中后悔的事，梅花便落满了南山"
 
 # ---------------- 页脚 ----------------
 footer:
@@ -71,13 +72,22 @@ about:
     - { class: "iconfont icon-github-fill", link: "https://github.com/Alicehope957", tip: "GitHub" }
 
 # ---------------- SEO ----------------
-# 输出 canonical 标签，告诉搜索引擎哪个才是正式地址
+# 输出 canonical 标签，告诉 搜索引擎哪个才是正式地址
 # 依赖 _config.yml 里的 url，换域名后 canonical 会自动跟着变
 canonical:
   enable: true
 
 # ---------------- 自定义样式 ----------------
-# 加载本地自托管的 KaTeX 公式样式（不依赖境外 CDN）
 custom_css:
+  # 加载本地自托管的 KaTeX 公式样式（不依赖境外 CDN）
   - /css/katex.min.css
   - /css/custom.css
+  # 加载 Live2D Widget 样式
+  - /live2d-widget/waifu.css
+
+# ---------------- 自定义脚本 ----------------
+
+custom_js:
+  # 加载Live2d Widget 脚本
+  - /live2d-widget/hit-precision.js
+  - /live2d-widget/autoload.js

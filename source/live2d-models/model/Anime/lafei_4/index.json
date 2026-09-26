@@ -1,0 +1,28 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "lafei_4.moc3",
+    "Textures": [
+      "textures/texture_00.png"
+    ],
+    "Physics": "lafei_4.physics3.json",
+    "Motions": {
+      "Idle": [
+        { "File": "motions/idle.motion3.json", "FadeInTime": 0.5, "FadeOutTime": 1.0 }
+      ],
+      "TapBody": [
+        { "File": "motions/touch_body.motion3.json", "FadeInTime": 0.3, "FadeOutTime": 0.5 },
+        { "File": "motions/touch_special.motion3.json", "FadeInTime": 0.3, "FadeOutTime": 0.5 },
+        { "File": "motions/touch_head.motion3.json", "FadeInTime": 0.3, "FadeOutTime": 0.5 }
+      ]
+    }
+  },
+  "Groups": [
+    { "Target": "Parameter", "Name": "EyeBlink", "Ids": ["ParamEyeLOpen", "ParamEyeROpen"] },
+    { "Target": "Parameter", "Name": "LipSync", "Ids": ["ParamMouthOpenY"] }
+  ],
+  "HitAreas": [
+    { "Id": "TouchBody", "Name": "Body" },
+    { "Id": "TouchHead", "Name": "Head" }
+  ]
+}

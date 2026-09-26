@@ -34,6 +34,9 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
+  # 跳过渲染 Live2D Widget 的资源和模型文件夹，避免被 Hexo 处理成 HTML
+  - 'live2d-widget/**'
+  - 'live2d-models/**'
 
 # ---------------- 写作 ----------------
 new_post_name: :title.md
