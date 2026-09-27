@@ -92,6 +92,7 @@ about:
   comments:
     enable: true
     type: waline
+  banner_img: 'https://img.rin3water.xyz/AboutIMG1.webp'
   icons:
     - { class: "iconfont icon-github-fill", link: "https://github.com/Alicehope957", tip: "GitHub" }
 
