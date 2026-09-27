@@ -3,6 +3,7 @@ title: 关于
 date: 2026-09-26 10:00:00
 layout: about
 type: about
+comment: true
 ---
 
 ## 我是谁

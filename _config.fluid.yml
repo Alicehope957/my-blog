@@ -58,6 +58,9 @@ post:
   # 图片点击放大
   image_zoom:
     enable: true
+  comments:
+    enable: true
+    type: waline
 
 # ---------------- 友链页（暂时用不上，关掉避免多一个空页面）----------------
 links:
@@ -69,9 +72,17 @@ about:
   intro: "科技数码 · ACGN爱好者"
   avatar: /img/avatar.png
   # 想加图标就去这里查 css class: https://hexo.fluid-dev.com/docs/icon/
+  comments:
+    enable: true
+    type: waline
   icons:
     - { class: "iconfont icon-github-fill", link: "https://github.com/Alicehope957", tip: "GitHub" }
 
+# ---------------- Waline ----------------
+waline:
+  serverURL: "https://waline.rin3water.xyz"
+  path: window.location.pathname
+  
 # ---------------- SEO ----------------
 # 输出 canonical 标签，告诉 搜索引擎哪个才是正式地址
 # 依赖 _config.yml 里的 url，换域名后 canonical 会自动跟着变
