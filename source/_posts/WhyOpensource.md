@@ -4,6 +4,7 @@ date: 2026-09-26 22:11:55
 updated:
 tags: [杂谈, 人工智能, 待更新]
 categories: [杂谈]
+banner_img: 'https://img.rin3water.xyz/DSBG.jpg'
 description: 我们是否应该坚守开源阵地？
 ---
 

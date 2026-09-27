@@ -17,6 +17,7 @@ navbar:
 
 # ---------------- 首页副标题（多行会随机显示一句）----------------
 index:
+  banner_img: /img/bg/Star.webp
   slogan:
     enable: true
     text:

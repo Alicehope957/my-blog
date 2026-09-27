@@ -4,6 +4,7 @@ updated:
 tags: [游戏, 杂谈, 待更新]
 categories: [杂谈]
 description: “未经调和的好酒”——IGN(9/10)
+banner_img: 'https://img.rin3water.xyz/RE9.jpg'
 ---
 
 <!-- 写作提示（发布后这段注释会出现在网页源码里，写完可以删掉）：
